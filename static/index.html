@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SlothSort — tidy files, slowly</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="/"><span class="logo">🦥</span><span>SlothSort<small>tidy files, slowly</small></span></a>
+      <div id="status" class="status"><span class="dot"></span> Checking local AI…</div>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">LOCAL-FIRST FILE ORGANIZER</div>
+      <h1>Your files are a mess.<br><span>Let the sloth handle it.</span></h1>
+      <p>Local AI suggestions for a folder and all its subfolders. SlothSort creates one organized copy while leaving your originals untouched.</p>
+      <div class="hero-pills"><span>● Local AI</span><span>● Preview first</span><span>● Undo supported</span></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head"><div><div class="eyebrow">STEP 01</div><h2>Choose a folder</h2></div><span class="step-icon">📁</span></div>
+      <p class="muted">Enter a folder path on this computer. SlothSort scans files recursively, skips its own output folder, and shows each file’s original relative path.</p>
+      <form id="scan-form" class="path-form">
+        <input id="folder" required value="" placeholder="e.g. C:\Users\You\Downloads" autocomplete="off">
+        <button type="submit" class="primary">Scan folder <span>→</span></button>
+      </form>
+      <div class="hint">Tip: test with a temporary folder containing copies of files first.</div>
+    </section>
+
+    <section id="results" class="panel hidden">
+      <div class="section-head"><div><div class="eyebrow">STEP 02</div><h2>Your cleanup plan</h2></div><span id="file-count" class="count">0 files</span></div>
+      <div class="toolbar">
+        <button id="analyze" class="primary">✨ Analyze with Qwen</button>
+        <button id="duplicates" class="secondary">Find exact duplicates</button>
+        <label class="checkline"><input type="checkbox" id="use-ai" checked> Use local AI</label>
+        <label class="checkline" title="Slower: sends every filename and available text preview to local Qwen. Binary files are judged from filename and folder path only."><input type="checkbox" id="rename-all"> Ask Qwen to suggest names for every file (slower)</label>
+      </div>
+      <div id="duplicate-report" class="notice hidden"></div>
+      <div id="ai-report" class="notice hidden"></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th class="select-col">Include</th><th>Original file / location</th><th>Category</th><th>Suggested name</th><th>Size</th></tr></thead>
+          <tbody id="files"></tbody>
+        </table>
+      </div>
+      <div class="apply-row">
+        <div><strong id="selected-count">0 selected</strong><div class="muted small">Creates a separate SlothSort_Organized folder. Originals stay untouched; existing outputs are never overwritten.</div></div>
+        <button id="apply" class="primary">Create organized copy</button>
+      </div>
+    </section>
+
+    <section id="undo-panel" class="panel hidden">
+      <div class="section-head"><div><div class="eyebrow">OPERATION COMPLETE</div><h2>Organized copy created</h2></div><span class="step-icon">↩️</span></div>
+      <p id="apply-report" class="muted"></p>
+      <button id="undo" class="secondary">Undo last operation</button>
+      <div id="undo-report" class="notice hidden"></div>
+    </section>
+
+    <footer><span>🦥 Sloth speed. Your computer. Your files.</span><span>SlothSort v0.2 · Local prototype</span></footer>
+  </main>
+  <div id="toast" class="toast hidden" role="status"></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
