@@ -1,0 +1,43 @@
+name: Python checks
+
+on:
+  push:
+    paths:
+      - "**.py"
+      - "requirements*.txt"
+      - "pyproject.toml"
+      - ".github/workflows/python-checks.yml"
+  pull_request:
+    paths:
+      - "**.py"
+      - "requirements*.txt"
+      - "pyproject.toml"
+      - ".github/workflows/python-checks.yml"
+  workflow_dispatch:
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile Python files
+        run: |
+          python - <<'PY'
+          import pathlib
+          import py_compile
+          files = list(pathlib.Path(".").rglob("*.py"))
+          files = [p for p in files if ".venv" not in p.parts and "venv" not in p.parts]
+          if not files:
+              print("No Python source files found; skipping syntax check.")
+          else:
+              for path in files:
+                  py_compile.compile(str(path), doraise=True)
+              print(f"Syntax check passed for {len(files)} Python file(s).")
+          PY
